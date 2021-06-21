@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+
+/* styles element from HomeMain.js */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 10px;
+}
+
+.container table {
+    border-spacing: 0px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    display: table;
+    border: 1px solid rgb(218, 215, 215, 0.8);
+}
+
+.container h1 {
+    font-size: 50px;
+}
+
+.container table>thead {
+    background-color: #eee;
+}
+
+.container button {
+    width: 100px;
+    background: #27AE60;
+    font-weight: bold;
+    border: 2 none;
+    padding: 10px 5px;
+    margin-bottom: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+
+
+/* styles element from Item.js */
+
+.containerItem td,
+th {
+    padding: 1rem;
+    border-bottom: 1px solid rgb(218, 215, 215);
+    border-right: 1px solid rgb(218, 215, 215);
+    max-width: 300px;
+}
+
+.containerItem img {
+    width: 120px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.containerItem:hover {
+    background-color: rgba(216, 220, 225, 0.1);
+}
+
+.containerItem td {
+    color: gray;
+}
+
+.inputCorrect,
+select,
+option {
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    color: black;
+}
+
+.error {
+    color: red;
+}
+
+.formRow {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputError {
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 3px;
+}

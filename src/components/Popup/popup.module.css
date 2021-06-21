@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.popupContainer {
+    height: 250px;
+    overflow: auto;
+}
+
+.popupContainer>div {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-bottom: 1px solid lightgrey;
+    scroll-behavior: smooth;
+}
+
+.image {
+    width: 30%;
+}
+
+.image img {
+    width: 70%;
+    border-radius: 5px;
+}
+
+.content {
+    width: 70%;
+    display: grid;
+    color: grey;
+}
