@@ -7,8 +7,8 @@ import styles from "./popup.module.css";
 
 export default function Popup({
     isModalVisible = false,
-    changedProducts = [],
-    colors = [],
+    changedProducts = {},
+    colors = {},
     handleOk,
 }) {
     return (
@@ -17,21 +17,28 @@ export default function Popup({
             visible={isModalVisible}
             onOk={handleOk}
             onCancel={handleOk}>
+
+            {/* The content of the Modal */}
             <div className={styles.popupContainer}>
                 {Object.keys(changedProducts).map((key, index) => (
                     <div key={"popup" + index} className={styles.div121}>
+                        {/* The Image of the content */}
                         <div className={styles.image}>
                             <img
                                 src={changedProducts[key].image}
                                 alt="Failure"
                             />
                         </div>
+
+                        {/* The text - information of the content */}
                         <div className={styles.content}>
-                            <span style={{ color: "black" }}>
+                            <span
+                                style={{ color: "black", fontWeight: "bold" }}>
                                 {changedProducts[key].name}
                             </span>
                             <span>
-                                ID: <span>{changedProducts[key].id}</span>
+                                ID:{" "}
+                                <span>{changedProducts[key].id}</span>
                             </span>
                             <span>
                                 SKU:{" "}
@@ -57,7 +64,7 @@ export default function Popup({
 // eslint-disable-next-line react/no-typos
 Popup.PropTypes = {
     isModalVisible: PropTypes.bool.isRequired,
-    changedProducts: PropTypes.array.isRequired,
-    colors: PropTypes.array.isRequired,
+    changedProducts: PropTypes.object.isRequired,
+    colors: PropTypes.object.isRequired,
     handleOk: PropTypes.func.isRequired,
-}
+};

@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import styles from "./home.module.css";
 
 export default function Item({
-    product = [],
-    colors = [],
-    originProduct = [],
+    product = {},
+    colors = {},
+    originProduct = {},
     index = 0,
     handleChangeProduct,
     takeChangedProducts,
@@ -33,7 +33,7 @@ export default function Item({
             } else if (values.name.length > 50) {
                 errors.name = "Name have at most 50 characters";
             }
-        }
+        };
 
         // Validate the sku of product
         if (values.sku !== undefined) {
@@ -41,14 +41,15 @@ export default function Item({
                 errors.sku = "Cannot be blank";
             } else if (values.sku.length > 20) {
                 errors.sku = "Sku have at most 20 characters";
-            }
-        }
+            };
+        };
 
         return errors;
     };
 
     // Handle the changed text on the screen
     const handleChange = (e) => {
+        // Call the function update of parent component
         handleChangeProduct(e.target.name, e.target.value || null, index);
     };
 
@@ -138,7 +139,10 @@ export default function Item({
 // Type of props
 // eslint-disable-next-line react/no-typos
 Item.PropTypes = {
-    product: PropTypes.array.isRequired,
-    colors: PropTypes.array.isRequired,
+    product: PropTypes.object.isRequired,
+    colors: PropTypes.object.isRequired,
+    originProduct: PropTypes.object.isRequired,
+    index: PropTypes.number.isRequired,
+    handleChangeProduct: PropTypes.func.isRequired,
     takeChangeProducts: PropTypes.func.isRequired,
 };

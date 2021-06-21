@@ -1,12 +1,5 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    outline: none;
-}
-
 .popupContainer {
-    height: 250px;
+    height: 350px;
     overflow: auto;
 }
 

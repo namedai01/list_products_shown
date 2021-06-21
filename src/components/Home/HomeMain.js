@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Pagination } from "antd";
+import { cloneDeep } from "lodash";
 
 // My components
 import Popup from "../Popup/Popup.js";
@@ -9,7 +10,7 @@ import Item from "./Item.js";
 import styles from "./home.module.css";
 import "antd/dist/antd.css";
 
-// Get api 
+// Get api
 import * as api from "../../api/index.js";
 
 // Get default image
@@ -19,10 +20,10 @@ import defaultImg from "../../assets/default.jpeg";
 const pageSize = 10;
 
 export default function HomeMain() {
-    // State "products" can be changed elements
+    // State "products" can change elements
     const [products, setProducts] = useState([]);
 
-    // State "originProducts" cannot be changed elements, that is origin products
+    // State "originProducts" cannot change elements, that is origin products
     const [originProducts, setOriginProducts] = useState([]);
 
     // State for object colors
@@ -42,8 +43,18 @@ export default function HomeMain() {
         maxIndex: 0,
     });
 
+    // Compare if the product fixed by the user is the same as the original product ?
+    const compareProducts = (product1, product2) => {
+        return (
+            product1.name === product2.name &&
+            product1.sku === product2.sku &&
+            product1.color == product2.color
+        );
+    };
+
     // Function to push the changed product to the Dictionary "changedProducts"
     const takeChangedProducts = (proNeedFixed, partFixed) => {
+        // Ex: changedProducts has format: {0: {id: 0, name: ...}, 1: {id: 1, name: ...}} with the key equal to "id of product"
         let temp = {
             ...changedProducts,
             ...{
@@ -54,7 +65,11 @@ export default function HomeMain() {
                 },
             },
         };
-        
+
+        // Compare if the product fixed by the user is the same as the original product ?. If yes, remove from "changedProduct"
+        compareProducts(proNeedFixed, temp[proNeedFixed.id]) &&
+            delete temp[proNeedFixed.id];
+
         setChangeProducts(temp);
     };
 
@@ -67,16 +82,20 @@ export default function HomeMain() {
     const validateChangedProducts = () => {
         for (const [key, product] of Object.entries(changedProducts)) {
             if (!product.name || !product.sku) return false;
-            if (product.name.length > 50 || product.sku.length > 50) return false;
+            if (product.name.length > 50 || product.sku.length > 50)
+                return false;
         }
         return true;
-    }
+    };
 
     // Function to pop up a modal
     const showModal = () => {
-        Object.keys(changedProducts).length > 0 && validateChangedProducts() && setIsModalVisible(true);
+        Object.keys(changedProducts).length > 0 &&
+            validateChangedProducts() &&
+            setIsModalVisible(true);
     };
 
+    // Get data from api
     useEffect(() => {
         const fetchData = async () => {
             // Get the list of error products from api through function getProducts
@@ -84,7 +103,9 @@ export default function HomeMain() {
 
             // Set state for state "products" (may be changed) and "originProducts" (cannot be changed)
             setProducts(productsData);
-            setOriginProducts(productsData);
+            
+            // Use cloneDeep to avoid reference to the same memory
+            setOriginProducts(cloneDeep(productsData));
 
             // Set state to calc the total page, min and max index for each page
             setPage({
@@ -117,20 +138,27 @@ export default function HomeMain() {
         });
     };
 
-    // Update product to display the screen
+    // Handle the changed text on the screen, change the state "products"
     const handleChangeProduct = (key, value, index) => {
-        let temp = [...products];
-        temp[index][key] = value;
-        setProducts(temp);
-    }
+        let tmp = [...products];
+        tmp[index][key] = value;
+        setProducts(tmp);
+    };
 
     return (
         <div className={styles.container}>
             <h1>List of error products</h1>
+
             <div>
                 <button onClick={showModal}>Submit</button>
-                <Popup isModalVisible={isModalVisible} handleOk={handleOk} changedProducts={changedProducts} colors={colors}/>
+                <Popup
+                    isModalVisible={isModalVisible}
+                    handleOk={handleOk}
+                    changedProducts={changedProducts}
+                    colors={colors}
+                />
             </div>
+
             <table>
                 <thead>
                     <tr>
@@ -148,6 +176,7 @@ export default function HomeMain() {
                         if (page.minIndex <= index && index < page.maxIndex) {
                             if (product.image === "")
                                 product.image = defaultImg;
+                            // Each component "Item" is a row of the table
                             return (
                                 <Item
                                     product={product}
@@ -156,7 +185,7 @@ export default function HomeMain() {
                                     key={"product" + index}
                                     takeChangedProducts={takeChangedProducts}
                                     handleChangeProduct={handleChangeProduct}
-                                    index = {index}
+                                    index={index}
                                 />
                             );
                         }
@@ -164,13 +193,14 @@ export default function HomeMain() {
                 </tbody>
             </table>
 
-        <Pagination
-            pageSize={pageSize}
-            current={page.current}
-            total={products.length}
-            onChange={handleChangePage}
-            style={{ marginTop: "15px" }}
-        />
+            {/* Pagination component */}
+            <Pagination
+                pageSize={pageSize}
+                current={page.current}
+                total={products.length}
+                onChange={handleChangePage}
+                style={{ marginTop: "40px", marginBottom: "40px" }}
+            />
         </div>
     );
 }
