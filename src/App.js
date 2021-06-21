@@ -12,7 +12,7 @@ function App() {
             <div className="App">
                 <Switch>
                 {/* Main web with route "/" */}
-                    <Route exact path="/" component={Home} />
+                    <Route exact path="/list_products_shown/" component={Home} />
                 </Switch>
             </div>
         </Router>
